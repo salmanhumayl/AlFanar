@@ -12,6 +12,7 @@ namespace AlFanar.Controllers
         public ActionResult Index()
         {
             return View();
+            //code 
         }
     }
 }
