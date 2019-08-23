@@ -11,7 +11,7 @@ namespace AlFanar.Controllers
         // GET: Test
         public ActionResult Index()
         {
-            return View();
+            return View("dsadsada");
             //code 
         }
     }
