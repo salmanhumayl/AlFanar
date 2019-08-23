@@ -1,0 +1,62 @@
+﻿
+@{
+    ViewBag.Title = "Daily Issuance Report";
+}
+<link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" /> @*Calander CSS *@
+<script src="~/Scripts/jquery-1.8.0.js"></script>
+<script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+
+<link href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="https://cdn.datatables.net/buttons/1.5.1/css/buttons.dataTables.min.css" rel="stylesheet" />
+
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.1/js/dataTables.buttons.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.flash.min.js"></script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/pdfmake.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/vfs_fonts.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.html5.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.print.min.js"></script>
+
+<h2>Daily Issuance Report</h2>
+
+@using (Ajax.BeginForm("DailyIssuance", "Stock",
+                               new AjaxOptions
+                               {
+                                   HttpMethod = "Post",
+                                   InsertionMode = InsertionMode.Replace,
+                                   UpdateTargetId = "DivDisciplinary",
+                                   LoadingElementId = "divloading"
+
+                               }, new { id = "ShowForm" }))
+{
+
+
+    <table class="table table-striped">
+        <tr>
+            <td>Date From: </td>
+            <td>@Html.TextBox("txtFromDate", null, new { style = "width:35%;", @class = "datepicker" })</td>
+            <td>Date To:</td>
+            <td>@Html.TextBox("txtToDate", null, new { style = "width:35%;", @class = "datepicker" })</td>
+        </tr>
+       
+        <tr>
+            <td><input type="button" value="Show" id="btnProcess" class="btn btn-primary" name="ButtonType" /></td>
+        </tr>
+    </table>
+}
+
+
+
+<div id="divloading" style="display: none">
+    <img src="~/Content/Images/Spinner.gif" runat="server" />
+</div>
+<div id="DivDisciplinary"></div>
+
+
+
+

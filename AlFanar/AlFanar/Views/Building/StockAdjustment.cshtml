@@ -1,0 +1,200 @@
+﻿@model Core.Domain.StockAdjustment.StockAdjustment
+@{
+    ViewBag.Title = "Stock Adjustment";
+}
+
+<link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-1.12.4.min.js"></script>
+
+<Script type="text/javascript">
+    $(document).ready(function () {
+
+        $('#cmbCategory').change(
+            function () {
+                var CategoryID = $('#cmbCategory').val();
+                $.ajax
+                    (
+                    {
+                        type: "GET",
+                        url: '@Url.Action("GetItemByCategory", "Purchase")' + "?ID=" + CategoryID,
+                        dataType: "json",
+                        data: {},
+                        success: function (response) {
+                            var option = "<option value=''>Select Item</option>"
+                            $.each
+                                (
+                                response, function (index, item) {
+                                    option += "<option value=" + item.ID + ">" + item.Name + "</option>"
+                                }
+                                );
+                            if (option != null && option != "" && option != "<option value=''>Select Item</option>") {
+                                $('#ItemID').html(option);
+                            }
+                            else {
+                                var option = "<option value=''>Select Item</option>";
+                                $('#ItemID').html(option);
+                            }
+
+                        }
+                    }
+                    );
+            })
+
+        $('#ItemID').change(
+            function () {
+                var ItemID = $('#ItemID').val();
+                
+                $.ajax
+                    (
+                    {
+                        type: "GET",
+                        url: 'GetCurrentStock?ItemID=' + ItemID,
+                        dataType: "json",
+                        data: {},
+                        success: function (response) {
+                            $("#messageSpan").attr("class", "alert alert-success");
+                            $("#messageSpan").html(response.Uint);
+
+                            $("#CStock").attr("class", "alert alert-danger");
+                            $("#CStock").html(response.CurrentStock);
+                            $("#CStock").val(response.CurrentStock);
+                            $("#nCurrentStock").val(response.CurrentStock);//Hidden Value
+
+                            $("#Quantity").val(response.CurrentStock);
+
+                            $("#AvgRate").attr("class", "alert alert-danger");
+                            $("#AvgRate").html(response.AverageRate);
+                            $("#AvgRate").val(response.AverageRate);
+
+                            $("#Rate").val($("#AvgRate").val());
+
+                            $("#CStockValue").attr("class", "alert alert-danger");
+                            $("#CStockValue").html(response.CStockValue);
+                            $("#CStockValue").val(response.CStockValue);
+
+
+                            $("#txtValueUpd").val($("#CStockValue").val());
+
+
+                            
+
+
+                            //$("#dialog-message").removeAttr("disabled", "disabled");
+
+
+                        }
+                    }
+                    );
+
+
+            }
+        );
+
+        $('#Quantity').change(
+            function () {
+                CalculateStockValue();
+            });
+        
+        $('#Rate').change(
+            function () {
+                CalculateStockValue();
+            });
+
+    });
+
+     function CalculateStockValue()
+    {
+        var quantity = $("#Quantity").val();
+        var rate = $("#Rate").val();
+        $("#txtValueUpd").val(quantity * rate); //Updated Stock Value ;
+    }
+
+</Script>
+
+<h2>Stock Adjustment</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <hr />
+        <div class="alert alert-danger" role="alert">
+            @Html.ValidationMessage("ConfimationMsg")
+        </div>
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        <table class="table table-striped table-hover table-bordered table-condensed" >
+            <tr>
+                <td>Date </td>
+                <td>@Html.EditorFor(model => model.AdjDate, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.AdjDate, "", new { @class = "text-danger" })
+                </td>
+                <td>Kitchen </td>
+                <td>@Html.DropDownListFor(model => model.KitchenID, ViewBag.Kitchen as SelectList, "Select Item", new { style = "width:100%;", @class = "form-control" })</td>
+            </tr>
+            <tr>
+                <td>Category</td>
+                <td>@Html.DropDownList("cmbCategory", ViewBag.Category as SelectList, "Select Category", new { @class = "form-control", @required = "required" })</td>
+                <td>Item</td>
+                <td>@Html.DropDownListFor(model => model.ItemID, new SelectList(string.Empty, "Value", "Text"), "Select Item", new { style = "width:100%;", @class = "form-control" })</td>
+            </tr>
+
+            <tr>
+                <td>Reason</td>
+                <td>@Html.DropDownListFor(model => model.Reason, ViewBag.lstReason as SelectList, "Select Reason", new { style = "width:100%;", @class = "form-control" })</td>
+                <td>Unit</td>
+                <td>
+                    <p id="messageSpan">
+                        <span></span>
+                    </p>
+                </td>
+            </tr>
+            <tr>
+                <td>Current Stock Quantity</td>
+                <td><p id="CStock">
+                        <span></span>
+                    </p>
+               </td>
+                <td>Avg.Rate
+                    <p id="AvgRate">
+                        <span></span>
+                    </p>
+                </td>
+                <td>Stock Value
+                    <p id="CStockValue">
+                        <span></span>
+                    </p>
+                </td>
+            </tr>
+            <tr>
+
+                <td>Updated Stock Quantity</td>
+                <td>@Html.EditorFor(model => model.Quantity, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.HiddenFor(model => model.nCurrentStock, new { htmlAttributes = new { @class = "form-control" } })
+                </td>
+                <td>Update Avg.Rate
+                    @Html.EditorFor(model => model.Rate, new { htmlAttributes = new { @class = "form-control" } })
+                   
+                <td>Update Stock Value
+                   <input type="text" id="txtValueUpd" disabled="disabled" /></td>
+            </tr>
+            <tr>
+                <td>Remarks</td>
+                <td colspan="3">@Html.EditorFor(model => model.Remarks, new { htmlAttributes = new { @class = "form-control" } })</td>
+            </tr>
+            <tr>
+                <td colspan="4" align="center"><input type="submit" value="Save" class="btn btn-default btn-lg" /></td>
+            </tr>
+        </table>
+      </div>
+
+
+        
+}
+
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

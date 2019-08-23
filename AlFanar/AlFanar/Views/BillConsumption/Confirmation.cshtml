@@ -1,0 +1,13 @@
+﻿
+@{
+    ViewBag.Title = "PrintBill";
+}
+
+<h2>Bill Created! </h2>
+<hr />
+
+
+
+
+<a href="@Url.Action("PrintBill",new{id=@TempData["BillID"]})"><i class="glyphicon glyphicon-print"></i> </a>
+<hr />

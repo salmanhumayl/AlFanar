@@ -1,0 +1,114 @@
+﻿@model IEnumerable<Services.Item.OpeningBalanceViewModel>
+
+@{
+    ViewBag.Title = "OpbList";
+}
+
+
+<link href="~/Content/DataTables/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="~/Content/DataTables/css/buttons.dataTables.min.css" rel="stylesheet" />
+
+
+<script src="~/Scripts/jquery-1.12.4.min.js"></script>
+
+<script src="~/Scripts/DataTables/AJCDataTables/jquery.dataTables.min.js"></script>
+<script src="~/Scripts/DataTables/AJCDataTables/dataTables.buttons.min.js"></script>
+<script src="~/Scripts/DataTables/AJCDataTables/jszip.min.js"></script>
+<script src="~/Scripts/DataTables/AJCDataTables/pdfmake.min.js"></script>
+<script src="~/Scripts/DataTables/AJCDataTables/vfs_fonts.js"></script>
+<script src="~/Scripts/DataTables/AJCDataTables/buttons.html5.min.js"></script>
+<script src="~/Scripts/DataTables/AJCDataTables/buttons.print.min.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $.noConflict();
+        $('#example').DataTable({
+            "iDisplayLength": 100,
+            dom: 'Bfrtip',
+
+            buttons: [
+                {
+                    extend: 'pdf',
+                    title: 'AL JABER KMS - Opening Balance',
+                },
+                {
+                    extend: 'excel',
+                    title: 'AL JABER KMS - Opening Balance',
+
+                },
+                {
+                    extend: 'print',
+                    title: 'AL JABER KMS - Opening Balance',
+
+                }
+            ]
+        });
+    });
+</script>
+
+
+
+
+<h2>Opening Balance</h2>
+
+
+@using (Html.BeginForm("OpbListCategoryWise", "Item", FormMethod.Post))
+
+{
+    <P>
+        @Html.DropDownList("cmbCategory", ViewBag.Category as SelectList, "Fill by Category", new { onchange = "this.form.submit();", style = "width:100%;", @class = "form-control" })
+    </P>
+}
+
+
+<table class="table" id="example">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.itemCode)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Cateogory)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayName("Opening Balance Date")
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Quantity)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Rate)
+            </th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.itemCode)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Cateogory)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.OpbalDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Quantity)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Rate)
+                </td>
+
+            </tr>
+        }
+    </tbody>
+</table>

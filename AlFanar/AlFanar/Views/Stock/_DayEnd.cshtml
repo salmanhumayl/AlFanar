@@ -1,0 +1,200 @@
+﻿@model IList<Services.Helper.DayEndReport>
+@{
+    decimal GrandTotal = 0;
+}
+
+
+
+<link href="~/Content/DataTables/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="~/Content/DataTables/css/buttons.dataTables.min.css" rel="stylesheet" />
+
+<script src="~/Scripts/jquery-1.12.4.min.js"></script>
+
+<script src="~/Scripts/DataTables/AJCDataTables/jquery.dataTables.min.js"></script>
+<script src="~/Scripts/DataTables/AJCDataTables/dataTables.buttons.min.js"></script>
+<script src="~/Scripts/DataTables/AJCDataTables/jszip.min.js"></script>
+<script src="~/Scripts/DataTables/AJCDataTables/pdfmake.min.js"></script>
+<script src="~/Scripts/DataTables/AJCDataTables/vfs_fonts.js"></script>
+<script src="~/Scripts/DataTables/AJCDataTables/buttons.html5.min.js"></script>
+<script src="~/Scripts/DataTables/AJCDataTables/buttons.print.min.js"></script>
+
+
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $.noConflict();
+        $('#example').DataTable({
+            "iDisplayLength": 300,
+            dom: 'Bfrtip',
+
+            buttons: [
+                {
+                    extend: 'pdf',
+                    title: 'AL JABER KMS - Day End Report',
+                    footer:true
+
+                },
+                {
+                    extend: 'excel',
+                    title: 'AL JABER KMS - Day End Report',
+                    footer: true
+
+                },
+                {
+                    extend: 'print',
+                    title: 'AL JABER KMS - Day End Report',
+                }
+            ]
+        });
+    });
+</script>
+
+<h2>Day End Summary </h2>
+
+
+@using (Html.BeginForm("DayEnd", "Stock", FormMethod.Post))
+
+{
+    <P>
+        @Html.DropDownList("cmbCategory", ViewBag.Category as SelectList, "Fill by Category", new { onchange = "this.form.submit();", style = "width:100%;", @class = "form-control" })
+    </P>
+}
+
+<table class="table" id="example" >
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayName("Category")
+            </th>
+        <th>
+            @Html.DisplayName("Item")
+        </th>
+        <th>
+            @Html.DisplayName("Unit")
+        </th>
+        <th>
+            @Html.DisplayName("OpBal")
+        </th>
+
+        <th>
+            @Html.DisplayName("OpBal Value")
+        </th>
+
+        <th>
+            @Html.DisplayName("Total Rcvd")
+        </th>
+        <th>
+            @Html.DisplayName("Total Issued")
+        </th>
+        <th>
+            @Html.DisplayName("Total Pr Return")
+        </th>
+        <th>
+            @Html.DisplayName("Total Issue Return")
+        </th>
+        <th>
+            @Html.DisplayName("Total Adj")
+        </th>
+        <th>
+            @Html.DisplayName("Closing Bal" )
+        </th>
+        <th>
+            @Html.DisplayName("AUP")
+        </th>
+        <th>
+            @Html.DisplayName("Closing Bal Value ")
+        </th>
+    </tr>
+    </thead>
+    <tbody>
+        @for (int i = 0; i < Model.Count; i++)
+            {
+
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => Model[i].cDes)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => Model[i].Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => Model[i].Unit)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => Model[i].Op_bal)
+
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => Model[i].Op_balValue)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => Model[i].Total_Receive)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => Model[i].Total_Issue)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => Model[i].TotalPrReturn)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => Model[i].TotalIssueReturn)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => Model[i].Total_Adjusted)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => Model[i].Tot_bal1)
+                </td>
+                <td> 
+                      @if (Model[i].Tot_bal1 > 0)
+                      {
+                        @Math.Round(@Convert.ToDecimal(Model[i].ActualAmt / Convert.ToDecimal(Math.Abs(Model[i].Tot_bal1))),2)
+                      }
+                      else
+                      {
+                          @:0
+                      }
+                </td>
+                <td>
+                    @if (Model[i].Tot_bal1 > 0)
+                    {
+
+                        @Math.Round(Convert.ToDecimal(Model[i].ActualAmt / Convert.ToDecimal(Math.Abs(Model[i].Tot_bal1)) * Model[i].Tot_bal1), 2)
+                        GrandTotal = GrandTotal + @Math.Round(Convert.ToDecimal(Model[i].ActualAmt / Convert.ToDecimal(Math.Abs(Model[i].Tot_bal1)) * Model[i].Tot_bal1), 2);
+                    }
+                    else
+                    {
+                        @:0
+                    }
+
+                </td>
+
+            </tr>
+        }
+    </tbody>
+    <tfoot>
+        <tr>
+            <td><b>Total:</b></td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td><b>@Math.Round(GrandTotal,2)</b></td>
+        </tr>
+
+    </tfoot>
+</table>
+
+
+
+
+

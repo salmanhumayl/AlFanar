@@ -1,0 +1,101 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{71163132-7196-475B-927C-231076C1CBC0}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Services</RootNamespace>
+    <AssemblyName>Services</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Dapper, Version=1.50.4.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Dapper.1.50.4\lib\net451\Dapper.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Net" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BillConsumption\BillConsumptionRepository.cs" />
+    <Compile Include="BillConsumption\BillConsumptionService.cs" />
+    <Compile Include="BillConsumption\IBillConsumption.cs" />
+    <Compile Include="BillConsumption\ViewModel.cs" />
+    <Compile Include="Tank\TankRepository.cs" />
+    <Compile Include="Tank\TankService.cs" />
+    <Compile Include="Tank\ITank.cs" />
+    <Compile Include="Category\CategoryRepository.cs" />
+    <Compile Include="Category\CategoryService.cs" />
+    <Compile Include="Category\ICategory.cs" />
+    <Compile Include="Helper\Common.cs" />
+    <Compile Include="Helper\StockViewModel.cs" />
+    <Compile Include="Building\IBuilding.cs" />
+    <Compile Include="Building\BuildingRepositary.cs" />
+    <Compile Include="Building\BuildingService.cs" />
+    <Compile Include="Building\ShoppingCartViewModel.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Purchase Requisition\IPR.cs" />
+    <Compile Include="Purchase Requisition\PRMainModel.cs" />
+    <Compile Include="Purchase Requisition\PRService.cs" />
+    <Compile Include="Purchase Requisition\PurchadeRequisitionRepository.cs" />
+    <Compile Include="PurchaseItem\PurchaseItem.cs" />
+    <Compile Include="PurchaseItem\PurchaseRepository.cs" />
+    <Compile Include="PurchaseItem\PurchaseService.cs" />
+    <Compile Include="Quotation\IQuotation.cs" />
+    <Compile Include="Quotation\QuotationMainModel.cs" />
+    <Compile Include="Quotation\QuotationRepository.cs" />
+    <Compile Include="Quotation\QuotationService.cs" />
+    <Compile Include="SalesItems\SalesItems.cs" />
+    <Compile Include="SalesItems\SalesRepository.cs" />
+    <Compile Include="SalesItems\SalesService.cs" />
+    <Compile Include="Customer\ICustomer.cs" />
+    <Compile Include="Customer\SupplierMainModel.cs" />
+    <Compile Include="Customer\CustomerRepository.cs" />
+    <Compile Include="Customer\CustomerService.cs" />
+    <Compile Include="RefillTank\IRefillTank.cs" />
+    <Compile Include="RefillTank\RefillTankRepository.cs" />
+    <Compile Include="RefillTank\RefillTankService.cs" />
+    <Compile Include="Tank\TankViewModel.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Core\Core\Core.csproj">
+      <Project>{54c1aed9-30bc-42b4-8938-6ae3cd994fbe}</Project>
+      <Name>Core</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

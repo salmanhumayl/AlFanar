@@ -1,0 +1,147 @@
+﻿@model IList<Services.Helper.DailyPurchase>
+@{
+}
+
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+
+
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $.noConflict();
+        $('#example').DataTable({
+            "iDisplayLength": 100,
+            dom: 'Bfrtip',
+
+            buttons: [
+                {
+                    extend: 'pdf',
+                    title: 'AL JABER KMS - Daily Purchase Report',
+
+                },
+                {
+                    extend: 'excel',
+                    title: 'AL JABER KMS - Daily Purchase Report',
+
+                },
+                {
+                    extend: 'print',
+                    title: 'AL JABER KMS - Daily Purchase Report',
+                }
+            ]
+        });
+    });
+</script>
+
+<table class="table" id="example">
+    <thead>
+        <tr>
+            
+            <th>
+                @Html.DisplayName("Invoice No")
+            </th>
+            <th>
+                @Html.DisplayName("Date")
+            </th>
+            <th>
+                @Html.DisplayName("Supplier")
+            </th>
+
+            <th>
+                @Html.DisplayName("Received By")
+            </th>
+
+            <th>
+                @Html.DisplayName("Remarks")
+            </th>
+
+            <th>
+                @Html.DisplayName("Item Name")
+            </th>
+            <th>
+                @Html.DisplayName("Unit")
+            </th>
+            <th>
+                @Html.DisplayName("Quantity")
+            </th>
+            <th>
+                @Html.DisplayName("Rate")
+            </th>
+            <th>
+                @Html.DisplayName("Value")
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @for (int i = 0; i < Model.Count; i++)
+            {
+
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => Model[i].InvoiceNo)
+                </td>
+
+                <td>
+                   
+                   @Model[i].Date.ToString("dd/MM/yyyy")
+                </td>
+
+                <td>
+                    @Model[i].Supplier
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => Model[i].ReceivedBy)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => Model[i].Remarks)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => Model[i].ItemName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => Model[i].Unit)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => Model[i].Quantity)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => Model[i].Rate)
+                </td>
+
+
+                <td>
+                    @Html.DisplayFor(modelItem => Model[i].TotalValue)
+                </td>
+            </tr>
+        }
+    </tbody>
+        <tfoot>
+            <tr>
+                <td><b>Total:</b></td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td></td>
+                <td></td>
+                <td><b>@Math.Round(@Convert.ToDecimal(@Model.Sum(b => b.TotalValue)), 2)</b></td>
+
+            </tr>
+            </tfoot>
+
+</table>
+
+
+
+
+
+
+
+
+
+
+

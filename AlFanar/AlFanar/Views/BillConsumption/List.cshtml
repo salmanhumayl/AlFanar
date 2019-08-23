@@ -1,0 +1,106 @@
+﻿@model IEnumerable<Services.BillConsumption.BillConsumptionViewModel>
+
+@{
+    ViewBag.Title = "List";
+}
+
+<h2>Bill Consumption</h2>
+
+<p>
+    @Html.ActionLink("Create New Bill", "Add", null, new { @class = "btn btn-primary" })
+</p>
+<table class="table">
+    <tr>
+        <th>
+            Contrat No
+        </th>
+        <th>
+            Cust.Name
+        </th>
+        <th>Build.No</th>
+        <th>Flat No</th>
+        <th>
+            Invoice No
+        </th>
+        <th>
+            Reading Date
+        </th>
+        <th>
+            Period From 
+        </th>
+        <th>
+            Period To
+        </th>
+        <th>
+           Prev.Read
+        </th>
+        <th>
+            Curr.Read
+        </th>
+        <th>
+            Con.
+        </th>
+        <th>
+            Rate
+        </th>
+        <th>
+            Total
+        </th>
+       
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.ContractNo)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CustomerName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.BuildingNo)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.FlatNo)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.InvoiceNo)
+        </td>
+        <td>
+            @item.CurrentReadingDate.ToString("dd/MMM/yyyy")
+        </td>
+        <td>
+            @item.CurrentReadingPeriodFrom.ToString("dd/MMM/yyyy")
+        </td>
+        <td>
+            @item.CurrentReadingPeriodTo.ToString("dd/MMM/yyyy")
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.PreviousReading)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CurrentReading)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Consumption)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Rate)
+        </td>
+        <td>
+            
+                @Math.Round(@Convert.ToDecimal(item.Consumption * Convert.ToDecimal(item.Rate)), 2)
+            
+
+
+        </td>
+        <td>
+           <a href="@Url.Action("Edit",new{id=item.id})" ><i class="glyphicon glyphicon-edit"></i> </a>
+           <a href="@Url.Action("PrintBill",new{id=item.id})" ><i class="glyphicon glyphicon-print"></i> </a>
+
+        </td>
+    </tr>
+}
+
+</table>

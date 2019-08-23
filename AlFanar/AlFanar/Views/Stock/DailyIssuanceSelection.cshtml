@@ -1,0 +1,81 @@
+﻿
+@{
+    ViewBag.Title = "Daily Issuance Report";
+}
+<link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" /> @*Calander CSS *@
+<script src="~/Scripts/jquery-1.8.0.js"></script>
+<script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+
+<link href="~/Content/DataTables/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="~/Content/DataTables/css/buttons.dataTables.min.css" rel="stylesheet" />
+
+<script src="~/Scripts/DataTables/AJCDataTables/jquery.dataTables.min.js"></script>
+<script src="~/Scripts/DataTables/AJCDataTables/dataTables.buttons.min.js"></script>
+<script src="~/Scripts/DataTables/AJCDataTables/jszip.min.js"></script>
+<script src="~/Scripts/DataTables/AJCDataTables/pdfmake.min.js"></script>
+<script src="~/Scripts/DataTables/AJCDataTables/vfs_fonts.js"></script>
+<script src="~/Scripts/DataTables/AJCDataTables/buttons.html5.min.js"></script>
+<script src="~/Scripts/DataTables/AJCDataTables/buttons.print.min.js"></script>
+
+
+<h2>Daily Issuance Report</h2>
+<script type="text/javascript">
+    $(document).ready(
+        function () {
+          //  $('body').on('focus', ".datepicker", function () {
+            //    $(this).datepicker({ dateFormat: 'dd/mm/yy' });
+            $('#txtFromDate').datepicker({ dateFormat: 'dd/MM/yy' });
+            $('#txtFromDate').datepicker('setDate', new Date());
+
+            $('#txtToDate').datepicker({ dateFormat: 'dd/MM/yy' });
+            $('#txtToDate').datepicker('setDate', new Date());
+
+            });
+
+        
+</script>
+
+
+
+@using (Ajax.BeginForm("DailyIssuance", "Stock",
+                                           new AjaxOptions
+                                           {
+                                               HttpMethod = "Post",
+                                               InsertionMode = InsertionMode.Replace,
+                                               UpdateTargetId = "DivDisciplinary",
+                                               LoadingElementId = "divloading"
+
+                                           }, new { id = "ShowForm" }))
+{
+
+
+    <table class="table table-striped">
+        <tr>
+            <td>Date From: </td>
+            <td>@Html.TextBox("txtFromDate", null, new { style = "width:35%;", @class = "datepicker" })</td>
+            <td>Date To:</td>
+            <td>@Html.TextBox("txtToDate", null, new { style = "width:35%;", @class = "datepicker" })</td>
+        </tr>
+        <tr>
+            <td>Issue To:</td>
+            <td>
+                  @Html.DropDownList("cmbChief", ViewBag.Chief as SelectList, "Please Select", new { @class = "form-control" })
+           </td>
+            <td>Category</td>
+            <td>@Html.DropDownList("cmbCategory", ViewBag.Category as SelectList, "Please Select", new { @class = "form-control" })</td>
+        </tr>
+
+        <tr>
+            <td><input type="submit" value="Show" id="btnProcess" class="btn btn-primary" name="ButtonType" /></td>
+        </tr>
+    </table>
+}
+
+<div id="divloading" style="display: none">
+    <img src="~/Content/Images/Spinner.gif" runat="server" />
+</div>
+<div id="DivDisciplinary"></div>
+
+
+
+

@@ -1,0 +1,167 @@
+﻿@model Core.Domain.OpeningBalance.OpeningBalance
+
+@{
+    ViewBag.Title = "OpeningBalance";
+}
+
+<link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-1.12.4.min.js"></script>
+
+<Script type="text/javascript">
+    $(document).ready(function () {
+
+        $('#cmbCategory').change(
+            function () {
+                var CategoryID = $('#cmbCategory').val();
+
+                $.ajax
+                    (
+                    {
+                        type: "GET",
+                        url: '@Url.Action("GetItemByCategory", "Purchase")' + "?ID=" + CategoryID,
+                        dataType: "json",
+                        data: {},
+                        success: function (response) {
+                            var option = "<option value=''>Select Item</option>"
+                            $.each
+                                (
+                                response, function (index, item) {
+                                    option += "<option value=" + item.ID + ">" + item.Name + "</option>"
+                                }
+                                );
+                            if (option != null && option != "" && option != "<option value=''>Select Item</option>") {
+                                $('#ItemID').html(option);
+                            }
+                            else {
+                                var option = "<option value=''>Select Item</option>";
+                                $('#ItemID').html(option);
+                            }
+
+                        }
+                    }
+                    );
+            })
+
+
+        $('#ItemID').change(
+            function () {
+                var ItemID = $('#ItemID').val();
+
+                $.ajax
+                    (
+                    {
+                        type: "GET",
+                        url: 'GetOpeningBalance?ItemID=' + ItemID,
+                        dataType: "json",
+                        data: {},
+                        success: function (response) {
+                            $("#messageSpan").attr("class", "alert alert-success");
+                            $("#messageSpan").html(response.Uint);
+
+                           // $("#PaymentPlan").attr("class", "alert alert-danger");
+                           // $("#PaymentPlan").html(response.OpeningBalance);
+                            $("#Quantity").val(response.OpeningBalance);
+
+                            //$("#dialog-message").removeAttr("disabled", "disabled");
+
+
+                        }
+                    }
+                    );
+
+
+            }
+        );
+
+    });
+
+</script>
+
+
+<h2>Opening Balance</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <hr />
+        <div class="alert alert-danger" role="alert">
+            @Html.ValidationMessage("ConfimationMsg")
+        </div>
+
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        <div class="form-group">
+            @Html.Label("Date", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.OpbalDate, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.OpbalDate, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            @Html.Label("Kitchen", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.KitchenID, ViewBag.Kitchen as  SelectList, "Select Item", new { style = "width:100%;", @class = "form-control" })
+
+                @Html.ValidationMessageFor(model => model.KitchenID, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.Label("Category", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("cmbCategory", ViewBag.Category as SelectList, "Select Category", new { @class = "form-control", @required = "required" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.Label("Item", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.ItemID, new SelectList(string.Empty, "Value", "Text"), "Select Item", new { style = "width:100%;", @class = "form-control" })
+            </div>
+            <div class="col-md-10">
+                <p id="messageSpan">
+                    <span></span>
+                </p>
+            </div>
+
+
+
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.Quantity, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Quantity, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Quantity, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.Label("Rate Per Unit", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Rate, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Rate, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Save" class="btn btn-default" />
+            </div>
+        </div>
+
+
+        <div>
+            @Html.ActionLink("List","OpbList", "Item",new { @class= "btn btn-info" })
+        </div>
+    </div>
+}
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

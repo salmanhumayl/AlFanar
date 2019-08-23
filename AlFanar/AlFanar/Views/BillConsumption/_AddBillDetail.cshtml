@@ -1,0 +1,166 @@
+﻿@model Services.BillConsumption.BillConsumptionAddViewModel
+
+
+<link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-1.12.4.min.js"></script>
+<script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+       // $("#BillHeader_CurrentReadingDate").datepicker();
+        //$("#BillHeader_CurrentReadingDate").datepicker({dateFormat: 'dd/MM/yy'});
+
+
+        $("#BillHeader_CurrentReadingDate").each(function () {
+            $(this).datepicker(({ dateFormat: 'dd/MM/yy' }));
+        });
+
+        $("#BillHeader_CurrentReadingPeriodFrom").each(function () {
+            $(this).datepicker(({ dateFormat: 'dd/MM/yy' }));
+        });
+
+        $("#BillHeader_CurrentReadingPeriodTo").each(function () {
+            $(this).datepicker(({ dateFormat: 'dd/MM/yy' }));
+        });
+        
+        $('#btnActualCost').click
+            (
+            function () {
+                if ($('#ShowForm').valid())
+                {
+                    $('#btnActualCost').attr("disabled", "disabled");
+                    $("#btnActualCost").attr('value', 'Processing...');
+                    $('#ShowForm').submit();
+                }
+                 else
+                 {
+                     $('#btnActualCost').removeAttr("disabled", "disabled");
+                     $("#btnActualCost").attr('value', 'Save Bill');
+
+                 }
+            });
+
+
+
+        $('#BillHeader_Consumption').change(
+            function () {
+                
+                CalculateBill();
+            });
+
+        $('#BillHeader_Rate').change(
+            function () {
+                CalculateBill();
+            });
+
+    });
+    function CalculateBill() {
+        var Consumption = $("#BillHeader_Consumption").val();
+        
+        var rate = $("#BillHeader_Rate").val();
+        $("#BillHeader_PaidAmount").val(Consumption * rate);
+        $("#totalbill").text(Consumption * rate);
+        $("#totalbillMonth").text(Consumption * rate);
+        
+    }
+    </script>
+
+@if (Model.CustomerDetail == null)
+{
+    <div class="alert alert-danger" role="alert">
+        No Record Found
+    </div>
+}
+else
+{
+    using (Html.BeginForm("SaveBill", "BillConsumption", FormMethod.Post, new { id = "ShowForm" }))
+    {
+<table class="table table-striped">
+    <tr>
+        <td>Customer Name :</td>
+        <td><b>@Html.DisplayFor(model => Model.CustomerDetail.CustomerName)</b>
+        <td>Building No :</td>
+        <td><b> @Html.DisplayFor(model => Model.CustomerDetail.BuildingNo)</b>
+        </td>
+        <td>Flat No :</td>
+        <td>
+            <b>@Html.DisplayFor(model => Model.CustomerDetail.FlatNo)</b>
+        </td>
+    </tr>
+    <tr>
+        <td>Tank Name</td>
+        <td><b>@Html.DisplayFor(model => Model.CustomerDetail.TankName)</b></td>
+        <td><b>Deposit</b></td>
+        <td class="alert-info">@Html.DisplayFor(model => Model.CustomerDetail.Deposit)</td>
+    </tr>
+
+    <tr>
+        @if (Model.ReadingDetail != null)
+        {
+            <td>Last Reading Date</td>
+            <td><b>@Model.ReadingDetail.CurrentReadingPeriodTo.ToString("dd/MMM/yyyy")</b></td>
+            <td>Last Reading No</td>
+            <td><b>@Html.DisplayFor(model => Model.ReadingDetail.CurrentReading)</b></td>
+        }
+        else
+        {
+            <td>Last Reading Date</td>
+            <td></td>
+            <td>Last Reading No</td>
+            <td></td>
+        }
+        
+    </tr>
+    <tr>
+        <td>Current Reading Date:</td>
+
+        <td>
+            @Html.HiddenFor(model => Model.CustomerDetail.ContractNo)
+            @Html.HiddenFor(model => Model.CustomerDetail.TankID)
+
+        @Html.EditorFor(model => model.BillHeader.CurrentReadingDate, new { htmlAttributes = new { @class = "form-control" } })</td>
+    </tr>
+    <tr>
+        <td>Current Reading Period From:</td>
+        <td>@Html.EditorFor(model => model.BillHeader.CurrentReadingPeriodFrom, new { htmlAttributes = new { @class = "form-control" } })</td>
+
+        <td>Current Reading Period To:</td>
+        <td>@Html.EditorFor(model => model.BillHeader.CurrentReadingPeriodTo, new { htmlAttributes = new { @class = "form-control" } })</td>
+    </tr>
+    <tr>
+        <td>Current Reading:</td>
+        <td>@Html.EditorFor(model => model.BillHeader.CurrentReading, new { htmlAttributes = new { @class = "form-control" } })</td>
+    </tr>
+
+    <tr>
+        <td style="background-color:burlywood">Consumption</td>
+        <td>@Html.EditorFor(model => model.BillHeader.Consumption, new { htmlAttributes = new { @class = "form-control" } })</td>
+
+        <td>Rate</td>
+        <td>@Html.EditorFor(model => model.BillHeader.Rate, new { htmlAttributes = new { @class = "form-control" } })</td>
+    </tr>
+    <tr>
+        <td class="alert-success">Bill for the Period</td>
+        <td><b><span id="totalbill"></span></b></td>
+    </tr>
+    <tr>
+        <td><b>OutStanding Balance</b></td>
+        <td><b>Payment</b></td>
+        <td><b>Bill for the month</b></td>
+    </tr>
+    <tr>
+        <td class="alert-danger"><h1>@Html.DisplayFor(model => model.CustomerOutStanding)</h1></td>
+        <td>@Html.EditorFor(model => model.BillHeader.PaidAmount, new { htmlAttributes = new { @class = "form-control" } })</td>
+        <td class="alert-success"><h1><span id="totalbillMonth"></span></h1></td>
+        <td><input type="button" id="btnActualCost" value="Save Bill" class="btn btn-success" /></td>
+    </tr>
+
+</table>
+    }
+}
+
+@Scripts.Render("~/bundles/jqueryval")
+
+

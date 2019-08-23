@@ -1,0 +1,112 @@
+﻿@model IList<Services.Helper.StockLedger>
+@{ 
+
+ @*   decimal opbal = Model[0].Openbal;
+    decimal StockValue=0;*@
+}
+@*<p class="alert alert-success">Opening Balance :@Model[0].Openbal </p>*@
+
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $.noConflict();
+        
+        $('#example').DataTable({
+            "ordering": false,
+            "iDisplayLength": 100,
+            dom: 'Bfrtip',
+
+            buttons: [
+                {
+                    extend: 'pdf',
+                    title: 'AL JABER KMS - Stock Ledger',
+
+                },
+                {
+                    extend: 'excel',
+                    title: 'AL JABER KMS - Stock Ledger',
+
+                },
+                {
+                    extend: 'print',
+                    title: 'AL JABER KMS - Stock Ledger',
+                }
+            ]
+        });
+    });
+</script>
+
+
+
+    <table class="table" id="example" >
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayName("Document No")
+                </th>
+                <th>ContractNo</th>
+                <th>Name</th>
+                <th>
+                    @Html.DisplayName("Date")
+                </th>
+                <th>
+                    @Html.DisplayName("Document Type")
+                </th>
+                <th>
+                    @Html.DisplayName("Description")
+                </th>
+                
+                <th>
+                    @Html.DisplayName("Filled")
+                </th>
+                <th>
+                    @Html.DisplayName("Consumed")
+                </th>
+                <th>
+                    @Html.DisplayName("Balance")
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (int i = 0; i < Model.Count; i++)
+            {
+               
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => Model[i].Document_ID)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => Model[i].CustomerContractNo)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => Model[i].CustomerName)
+                    </td>
+                    <td>
+                        
+                        @Model[i].Date.ToString("dd/MM/yyyy")
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => Model[i].document_type)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => Model[i].document_Description)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => Model[i].received)
+
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => Model[i].issued)
+
+                    </td>
+                    <td>@Html.DisplayFor(modelItem => Model[i].Actualbalance)
+                    
+                    </td>
+                </tr>
+            }
+            </tbody>
+    </table>
+
+

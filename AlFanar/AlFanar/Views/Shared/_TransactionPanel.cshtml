@@ -1,0 +1,29 @@
+﻿@model IEnumerable<Services.Helper.TransactionPanel>
+<div class="panel-body">
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover table-striped">
+            <thead>
+                <tr>
+                    <th>Issue To</th>
+                    <th>Amount</th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var item in Model)
+            { 
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.IssueTo)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TotalValue)
+                    </td>
+                </tr>
+            }
+</tbody>
+        </table>
+    </div>
+    <div class="text-right">
+        <a href="#">View All Transactions <i class="fa fa-arrow-circle-right"></i></a>
+    </div>
+</div>

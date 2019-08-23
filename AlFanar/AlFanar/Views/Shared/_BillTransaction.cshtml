@@ -1,0 +1,58 @@
+﻿@model IEnumerable<Services.BillConsumption.BillConsumptionViewModel>
+
+@{
+    ViewBag.Title = "List";
+}
+
+<table class="table">
+    <tr>
+        <th>
+            Contrat No
+        </th>
+        <th>
+            Name
+        </th>
+        <th>Build.No</th>
+        <th>Flat No</th>
+        <th>Consumption</th>
+        <th>
+            Rate
+        </th>
+        <th>
+            Total
+        </th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ContractNo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CustomerName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BuildingNo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FlatNo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Consumption)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Rate)
+            </td>
+            <td>
+
+                @Math.Round(@Convert.ToDecimal(item.Consumption * Convert.ToDecimal(item.Rate)), 2)
+
+
+
+            </td>
+        </tr>
+    }
+
+</table>
+

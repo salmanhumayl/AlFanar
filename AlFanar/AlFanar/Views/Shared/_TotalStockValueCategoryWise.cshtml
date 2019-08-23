@@ -1,0 +1,33 @@
+﻿@model IEnumerable<Services.Helper.TotalValueCategoryWise>
+
+<div class="panel-body">
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover table-striped">
+            <thead>
+                <tr>
+                    <th>Category</th>
+                    <th>Amount</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Category)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.TotalValue)
+                        </td>
+                    </tr>
+                }
+                <tr>
+                    <td class="alert-danger">Total:</td>
+                    <td ><b>@Math.Round(@Convert.ToDecimal(@Model.Sum(b => b.TotalValue)), 2)</b></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+   
+</div>
+
